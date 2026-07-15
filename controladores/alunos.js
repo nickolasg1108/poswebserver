@@ -21,16 +21,28 @@ function getAluno(req, res) {
     }
 }
 
-function postAluno(req, res){
-   try {
-        const alunoNovo = req.body
-        insereAluno(alunoNovo)
-        res.status(201)
-        res.send("Aluno inserido com sucesso")
-    } catch (error) {
-        res.status(500)
-        res.send(error.message)
+function postAluno(req, res) {
+  try {
+    const alunoNovo = req.body;
+
+    if (
+        typeof alunoNovo.matricula !== 'string' ||
+        typeof alunoNovo.nome !== 'string' ||
+        typeof alunoNovo.email !== 'string' ||
+        typeof alunoNovo.status !== 'string' ||
+        typeof alunoNovo.data !== 'string'
+    ) {
+        return res.status(400).send("Bad Request: Todos os campos devem ser enviados como texto (string).");
     }
+
+    insereAluno(alunoNovo);
+    res.status(201);
+    res.send("Aluno inserido com sucesso");
+      
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
 }
 
 function patchAluno(req, res){
